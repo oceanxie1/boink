@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, Typography } from "@mui/material";
 import {
     PersonOutline,
     ShoppingBagOutlined,
@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from '../../state';
+import kkumaShop from "../kkumashop2.png"
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -38,9 +39,13 @@ const Navbar = () => {
                 <Box
                     onClick={() => navigate("/")}
                     sx={{ '&:hover': { cursor: "pointer" }}}
-                    color={shades.secondary[500]}
+                    color={"white"}
                 >
-                    KkumaCharms
+                    <img 
+                        src={kkumaShop}
+                        alt="Logo"
+                        style={{ width: 'auto', height: '100px' }} // Adjust size as needed
+                    />
                 </Box>
                 <Box
                     display="flex"
@@ -48,10 +53,10 @@ const Navbar = () => {
                     columnGap="20px"
                     zIndex="2"
                 >
-                    <IconButton sx={{ color: "black" }}>
+                    <IconButton sx={{ color: "white" }}>
                         <SearchOutlined />
                     </IconButton>
-                    <IconButton sx={{ color: "black" }}>
+                    <IconButton sx={{ color: "white" }}>
                         <PersonOutline />
                     </IconButton>
 
@@ -71,11 +76,11 @@ const Navbar = () => {
                     >
                         <IconButton 
                             onClick={() => dispatch(setIsCartOpen({}))}
-                            sx={{ color: "black" }}>
+                            sx={{ color: "white" }}>
                             <ShoppingBagOutlined />
                     </IconButton>
                     </Badge>
-                    <IconButton sx={{ color: "black" }}>
+                    <IconButton sx={{ color: "white" }}>
                         <MenuOutlined />
                     </IconButton>
                 </Box>

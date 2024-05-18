@@ -53,22 +53,22 @@ export const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: ["Danfo", "sans-serif"].join(","),
+        fontFamily: ["Gaegu", "sans-serif"].join(","),
         fontSize: 11,
         h1: {
-            fontFamily: ["Danfo", "sans-serif"].join(","),
+            fontFamily: ["Gaegu", "sans-serif"].join(","),
         fontSize: 48,
         },
         h2: {
-            fontFamily: ["Danfo", "sans-serif"].join(","),
+            fontFamily: ["Gaegu", "sans-serif"].join(","),
         fontSize: 36,
         },
         h3: {
-            fontFamily: ["Danfo", "sans-serif"].join(","),
+            fontFamily: ["Gaegu", "sans-serif"].join(","),
         fontSize: 20,
         },
         h4: {
-            fontFamily: ["Danfo", "sans-serif"].join(","),
+            fontFamily: ["Gaegu", "sans-serif"].join(","),
         fontSize: 14,
         },
     }

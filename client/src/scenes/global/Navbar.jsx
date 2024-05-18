@@ -19,7 +19,7 @@ const Navbar = () => {
     return (
         <Box
             display="flex"
-            alignIems="center"
+            alignItems="center"
             width="100%"
             height="60px"
             backgroundColor="rgba(255, 255, 255 0.95)"
@@ -53,10 +53,10 @@ const Navbar = () => {
                     columnGap="20px"
                     zIndex="2"
                 >
-                    <IconButton sx={{ color: "white" }}>
+                    <IconButton sx={{ color: "black" }}>
                         <SearchOutlined />
                     </IconButton>
-                    <IconButton sx={{ color: "white" }}>
+                    <IconButton sx={{ color: "black" }}>
                         <PersonOutline />
                     </IconButton>
 
@@ -76,11 +76,11 @@ const Navbar = () => {
                     >
                         <IconButton 
                             onClick={() => dispatch(setIsCartOpen({}))}
-                            sx={{ color: "white" }}>
+                            sx={{ color: "black" }}>
                             <ShoppingBagOutlined />
                     </IconButton>
                     </Badge>
-                    <IconButton sx={{ color: "white" }}>
+                    <IconButton sx={{ color: "black" }}>
                         <MenuOutlined />
                     </IconButton>
                 </Box>

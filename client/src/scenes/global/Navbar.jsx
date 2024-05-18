@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from '../../state';
-import kkumaShop from "../kkumashop2.png"
+import kkumaShop from "../kkumashop3.png"
 
 const Navbar = () => {
     const navigate = useNavigate();

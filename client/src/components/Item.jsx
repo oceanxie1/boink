@@ -6,26 +6,26 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
 import { addToCart } from "../state";
 import { useNavigate } from "react-router-dom";
+import { darken } from "@mui/system";
 
 const Item = ({ item, width }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
-  const {
-    palette: { neutral },
-  } = useTheme();
+  const [isAdded, setIsAdded] = useState(false);
+  const { palette: { neutral } } = useTheme();
 
   const { category, price, name, image } = item.attributes;
-  const {
-    data: {
-      attributes: {
-        formats: {
-          medium: { url },
-        },
-      },
-    },
-  } = image;
+  const { url } = image.data.attributes.formats.medium;
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ item: { ...item, count } }));
+    setIsAdded(true);
+  };
+
+  const buttonColor = isAdded ? "#bb83b0" : shades.primary[300];
+  const hoverColor = darken(buttonColor, 0.2); // Darken the color by 20%
 
   return (
     <Box width={width}>
@@ -34,8 +34,9 @@ const Item = ({ item, width }) => {
         onMouseOver={() => setIsHovered(true)}
         onMouseOut={() => setIsHovered(false)}
       >
+        {/* Image of the item */}
         <img
-          alt={item.name}
+          alt={name}
           width="400px"
           height="400px"
           src={`http://localhost:1337${url}`}
@@ -66,24 +67,31 @@ const Item = ({ item, width }) => {
               </IconButton>
             </Box>
             <Button
-              onClick={() => {
-                dispatch(addToCart({ item: { ...item, count } }));
+              onClick={handleAddToCart}
+              sx={{
+                backgroundColor: buttonColor,
+                color: "white",
+                '&:hover': {
+                  backgroundColor: hoverColor, // Use the darker color on hover
+                },
               }}
-              sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >
-              Add to Cart
+              {isAdded ? "Added to Cart" : "Add to Cart"}
             </Button>
           </Box>
         </Box>
       </Box>
 
       <Box mt="3px">
+        {/* Category Name */}
         <Typography variant="subtitle2" color={neutral.dark}>
           {category
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase())}
         </Typography>
+        {/* Item Name */}
         <Typography>{name}</Typography>
+        {/* Item Price */}
         <Typography fontWeight="bold">${price}</Typography>
       </Box>
     </Box>

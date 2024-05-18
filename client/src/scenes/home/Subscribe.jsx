@@ -17,7 +17,7 @@ const Subscribe = () => {
                 display="flex"
                 alignItems="center"
                 width="75%"
-                backgroundColor="#f9f1f1"
+                backgroundColor="#efdeec"
             >
                 <InputBase
                     sx={{ ml: 1, flex: 1 }}

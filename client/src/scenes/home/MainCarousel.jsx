@@ -6,7 +6,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { shades } from "../../theme";
 import { useMediaQuery } from "@mui/material";
 import { useMatch } from "react-router-dom";
-import logoImage from "../logo.png"
+import logoImage from "../logo3.png"
 
 // imports all image from assets folder
 const importAll = (r) =>

@@ -8,6 +8,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
 import { addToCart } from "../../state";
 import { useDispatch } from "react-redux";
+import { darken } from "@mui/system";
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const ItemDetails = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
 
   const extractText = useCallback((descArray) => {
     return descArray?.map(paragraph => 
@@ -62,9 +65,12 @@ const ItemDetails = () => {
 
   const itemLongDescription = extractText(item?.attributes?.longDescription);
 
+  const buttonColor = isAdded ? "#bb83b0" : shades.primary[300];
+  const hoverColor = darken(buttonColor, 0.2); 
+
   const handleAddToCart = () => {
-    const itemToAdd = { ...item, count };
-    dispatch(addToCart({ item: itemToAdd }));
+    dispatch(addToCart({ item: { ...item, count } }));
+    setIsAdded(true);
   };
 
   return (
@@ -113,16 +119,16 @@ const ItemDetails = () => {
               </IconButton>
             </Box>
             <Button
-              sx={{
-                backgroundColor: "#222222",
-                color: "white",
-                borderRadius: 0,
-                minWidth: "150px",
-                padding: "10px 40px",
-              }}
               onClick={handleAddToCart}
+              sx={{
+                backgroundColor: buttonColor,
+                color: "white",
+                '&:hover': {
+                  backgroundColor: hoverColor, // Use the darker color on hover
+                },
+              }}
             >
-              ADD TO CART
+              {isAdded ? "Added to Cart" : "Add to Cart"}
             </Button>
           </Box>
           <Box>

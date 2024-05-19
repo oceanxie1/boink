@@ -5,7 +5,7 @@ import { shades } from "../../theme";
 const Footer = () => {
     const { palette: { neutral }} = useTheme();
     return (
-        <Box mt="70px" p="40px 0" backgroundColor="#efdeec">
+        <Box mt="70px" p="40px 0" backgroundColor={shades.secondary[500]}>
             <Box
                 width="80%"
                 margin="auto"

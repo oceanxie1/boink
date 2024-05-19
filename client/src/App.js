@@ -7,6 +7,7 @@ import {
   useLocation
 } from 'react-router-dom';
 import Home from "./scenes/home/Home";
+import SearchResults from './scenes/searchResults/SearchResults';
 import ItemDetails from "./scenes/itemDetails/ItemDetails";
 import Checkout from "./scenes/checkout/Checkout";
 import Confirmation from "./scenes/checkout/Confirmation";
@@ -32,7 +33,8 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path = "/" element = {<Home />} />
-          <Route path = "item/:itemId" element = {<ItemDetails />} />
+          <Route path = "/search" element = {<SearchResults />} />
+          <Route path = "/item/:itemId" element = {<ItemDetails />} />
           <Route path = "checkout" element = {<Checkout />} />
           <Route path = "checkout/success" element = {<Confirmation />} />
         </Routes>

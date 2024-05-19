@@ -12,7 +12,7 @@ import {
   setIsCartOpen,
 } from "../../state";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import { darken } from "@mui/system";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -27,8 +27,11 @@ const CartMenu = () => {
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
   const totalPrice = cart.reduce((total, item) => {
-    return total + item.count * (item.attributes.price || 0); // Ensure price is a number
-  }, 0);
+    return total + item.count * item.attributes.price;
+  }, 0).toFixed(2);
+
+  const checkoutButtonColor = shades.secondary[500];
+  const hoverColor = darken(checkoutButtonColor, 0.2); 
 
   return (
     <Box
@@ -139,12 +142,15 @@ const CartMenu = () => {
             </FlexBox>
             <Button
               sx={{
-                backgroundColor: shades.primary[400],
+                backgroundColor: checkoutButtonColor,
                 color: "white",
                 borderRadius: 0,
                 minWidth: "100%",
                 padding: "20px 40px",
                 m: "20px 0",
+                '&:hover': {
+                  backgroundColor: hoverColor,
+                },
               }}
               onClick={() => {
                 navigate("/checkout");
@@ -158,30 +164,6 @@ const CartMenu = () => {
       </Box>
     </Box>
   );
-};
-
-CartMenu.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    count: PropTypes.number,
-    attributes: PropTypes.shape({
-      name: PropTypes.string,
-      shortDescription: PropTypes.string,
-      price: PropTypes.number,
-      image: PropTypes.shape({
-        data: PropTypes.shape({
-          attributes: PropTypes.shape({
-            formats: PropTypes.shape({
-              medium: PropTypes.shape({
-                url: PropTypes.string,
-              }),
-            }),
-          }),
-        }),
-      }),
-    }),
-  })),
-  isCartOpen: PropTypes.bool,
 };
 
 export default CartMenu;

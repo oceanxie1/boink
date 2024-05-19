@@ -1,27 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
 import { addToCart } from "../state";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { darken } from "@mui/system";
 
 const Item = ({ item, width }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded, setIsAdded] = useState(false); // State to track if item is added
   const { palette: { neutral } } = useTheme();
 
   const { category, price, name, image } = item.attributes;
   const { url } = image.data.attributes.formats.medium;
 
+  // Reset added state on navigation
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsAdded(false);
+    };
+
+    window.addEventListener("popstate", handleRouteChange);
+    return () => {
+      window.removeEventListener("popstate", handleRouteChange);
+    };
+  }, [location.pathname]);
+
   const handleAddToCart = () => {
-    dispatch(addToCart({ item: { ...item, count } }));
-    setIsAdded(true);
+    if (!isAdded) {
+      dispatch(addToCart({ item: { ...item, count } }));
+      setIsAdded(true);
+    }
+  };
+
+  const handleCountChange = (newCount) => {
+    setCount(newCount);
+    setIsAdded(false);
   };
 
   const buttonColor = isAdded ? "#bb83b0" : shades.primary[300];
@@ -58,11 +78,11 @@ const Item = ({ item, width }) => {
               backgroundColor={shades.neutral[100]}
               borderRadius="3px"
             >
-              <IconButton onClick={() => setCount(Math.max(count - 1, 1))}>
+              <IconButton onClick={() => handleCountChange(Math.max(count - 1, 1))}>
                 <RemoveIcon />
               </IconButton>
               <Typography color={shades.primary[300]}>{count}</Typography>
-              <IconButton onClick={() => setCount(count + 1)}>
+              <IconButton onClick={() => handleCountChange(count + 1)}>
                 <AddIcon />
               </IconButton>
             </Box>

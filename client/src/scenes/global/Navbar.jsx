@@ -1,20 +1,55 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Box, IconButton, Typography } from "@mui/material";
+import { Badge, Box, IconButton, TextField } from "@mui/material";
 import {
     PersonOutline,
     ShoppingBagOutlined,
     MenuOutlined,
     SearchOutlined
-} from "@mui/icons-material"
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { shades } from "../../theme";
 import { setIsCartOpen } from '../../state';
-import kkumaShop from "../kkumashop3.png"
+import kkumaShop from "../kkumashop3.png";
+import React, { useState, useEffect, useCallback } from 'react';
+import debounce from 'lodash.debounce';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart.cart)
+    const cart = useSelector((state) => state.cart.cart);
+
+    // Compute the total count of items in the cart
+    const totalItemCount = cart.reduce((total, item) => total + item.count, 0);
+
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const debouncedNavigate = useCallback(
+        debounce((query) => {
+            if (query.trim() !== "") {
+                navigate(`/search?query=${query}`);
+            }
+        }, 300), // 300ms debounce time
+        [navigate]
+    );
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+        debouncedNavigate(event.target.value);
+    };
+
+    const handleSearchToggle = () => {
+        if (isSearchVisible) {
+            setSearchQuery(""); // Clear the search query when closing the search bar
+            navigate("/"); // Navigate to home page
+        }
+        setIsSearchVisible(!isSearchVisible);
+    };
+
+    useEffect(() => {
+        return () => {
+            debouncedNavigate.cancel(); // Cleanup debounce on unmount
+        };
+    }, [debouncedNavigate]);
 
     return (
         <Box
@@ -53,7 +88,22 @@ const Navbar = () => {
                     columnGap="20px"
                     zIndex="2"
                 >
-                    <IconButton sx={{ color: "black" }}>
+                    {isSearchVisible && (
+                        <form>
+                            <TextField
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search..."
+                                variant="outlined"
+                                size="small"
+                                sx={{ backgroundColor: "white", borderRadius: "4px" }}
+                            />
+                        </form>
+                    )}
+                    <IconButton 
+                        sx={{ color: "black" }}
+                        onClick={handleSearchToggle}
+                    >
                         <SearchOutlined />
                     </IconButton>
                     <IconButton sx={{ color: "black" }}>
@@ -61,11 +111,11 @@ const Navbar = () => {
                     </IconButton>
 
                     <Badge
-                        badgeContent={cart.length}
+                        badgeContent={totalItemCount}
                         color="secondary"
-                        invisible={cart.length === 0}
-                        sx = {{
-                            "& .MuiBadge-badge" : {
+                        invisible={totalItemCount === 0}
+                        sx={{
+                            "& .MuiBadge-badge": {
                                 right: 5,
                                 top: 5,
                                 padding: "0 4px",
@@ -78,7 +128,7 @@ const Navbar = () => {
                             onClick={() => dispatch(setIsCartOpen({}))}
                             sx={{ color: "black" }}>
                             <ShoppingBagOutlined />
-                    </IconButton>
+                        </IconButton>
                     </Badge>
                     <IconButton sx={{ color: "black" }}>
                         <MenuOutlined />

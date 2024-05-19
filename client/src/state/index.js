@@ -15,12 +15,23 @@ export const cartSlice = createSlice({
     },
 
     addToCart: (state, action) => {
-        const itemToAdd = action.payload.item;
-        if (!itemToAdd || !itemToAdd.id) {
-          console.error("Invalid item payload", action.payload);
-          return;
-        }
+      const itemToAdd = action.payload.item;
+      if (!itemToAdd || !itemToAdd.id) {
+        console.error("Invalid item payload", action.payload);
+        return;
+      }
+      const existingItem = state.cart.find(item => item.id === itemToAdd.id);
+      if (existingItem) {
+        // Item already in cart, update the count
+        state.cart = state.cart.map(item =>
+          item.id === itemToAdd.id
+            ? { ...item, count: item.count + itemToAdd.count }
+            : item
+        );
+      } else {
+        // Item not in cart, add it
         state.cart = [...state.cart, itemToAdd];
+      }
     },
 
     removeFromCart: (state, action) => {

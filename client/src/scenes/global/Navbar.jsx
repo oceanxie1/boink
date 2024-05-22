@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Box, IconButton, TextField } from "@mui/material";
+import { Badge, Box, IconButton, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
 import {
     PersonOutline,
     ShoppingBagOutlined,
@@ -11,6 +11,7 @@ import { setIsCartOpen } from '../../state';
 import kkumaShop from "../kkumashop3.png";
 import React, { useState, useEffect, useCallback } from 'react';
 import debounce from 'lodash.debounce';
+import axios from 'axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -22,6 +23,11 @@ const Navbar = () => {
 
     const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [username, setUsername] = useState(null); 
 
     const debouncedNavigate = useCallback(
         debounce((query) => {
@@ -43,6 +49,39 @@ const Navbar = () => {
             navigate("/"); // Navigate to home page
         }
         setIsSearchVisible(!isSearchVisible);
+    };
+
+    const handleLoginOpen = () => {
+        const token = sessionStorage.getItem('token'); // Use sessionStorage
+        const user = JSON.parse(sessionStorage.getItem('user')); // Get user info from sessionStorage
+        if (token) {
+            setUsername(user.username);
+            navigate('/account');
+        } else {
+            setIsLoginOpen(true);
+        }
+    };
+
+    const handleLoginClose = () => {
+        setIsLoginOpen(false);
+        setError('');
+    };
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:1337/api/auth/local', {
+                identifier: email,
+                password: password,
+            });
+            const { jwt, user } = response.data;
+            sessionStorage.setItem('token', jwt); // Use sessionStorage
+            sessionStorage.setItem('user', JSON.stringify(user)); // Use sessionStorage
+            setUsername(user.username); // Set username
+            handleLoginClose();
+        } catch (error) {
+            setError('Invalid login credentials');
+        }
     };
 
     useEffect(() => {
@@ -106,10 +145,24 @@ const Navbar = () => {
                     >
                         <SearchOutlined />
                     </IconButton>
-                    <IconButton sx={{ color: "black" }}>
-                        <PersonOutline />
-                    </IconButton>
-
+                    <Box display="flex" flexDirection="column" alignItems="center" position="relative">
+                        <IconButton 
+                            sx={{ color: "black" }}
+                            onClick={handleLoginOpen}
+                        >
+                            <PersonOutline />
+                        </IconButton>
+                        <Typography 
+                            variant="body2" 
+                            position="absolute" 
+                            top="75%" 
+                            transform="translateX(-50%)"
+                            sx={{ cursor: "pointer" }}
+                            onClick={handleLoginOpen}
+                        >
+                            {username ? username : "Log In"}
+                        </Typography>
+                    </Box>
                     <Badge
                         badgeContent={totalItemCount}
                         color="secondary"
@@ -135,6 +188,36 @@ const Navbar = () => {
                     </IconButton>
                 </Box>
             </Box>
+            <Dialog open={isLoginOpen} onClose={handleLoginClose}>
+                <DialogTitle>Login</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleLogin}>
+                        <TextField
+                            label="Email/Username"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            fullWidth
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            label="Password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            fullWidth
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        {error && <Typography color="error">{error}</Typography>}
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleLoginClose}>Cancel</Button>
+                    <Button onClick={handleLogin} variant="contained" color="primary">Login</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }

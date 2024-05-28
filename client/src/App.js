@@ -17,6 +17,7 @@ import Footer from "./scenes/global/Footer";
 import Login from "./scenes/global/Login";
 import Account from "./scenes/account/Account";
 import ProtectedRoute from './ProtectedRoute';
+import AccountCreation from "./scenes/account/AccountCreation";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ function App() {
           <Route path = "/item/:itemId" element = {<ItemDetails />} />
           <Route path = "checkout" element = {<Checkout />} />
           <Route path = "checkout/success" element = {<Confirmation />} />
+          <Route path = "/create-account" element = {<AccountCreation />} />
           <Route path = "/account" element = {<ProtectedRoute element={Account} />} />
         </Routes>
         <CartMenu />

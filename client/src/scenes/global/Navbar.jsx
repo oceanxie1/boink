@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Box, IconButton, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
+import { Badge, Box, IconButton, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Link } from "@mui/material";
 import {
     PersonOutline,
     ShoppingBagOutlined,
@@ -84,6 +84,18 @@ const Navbar = () => {
         }
     };
 
+    const handleCreateAccountClick = () => {
+        handleLoginClose();
+        navigate('/create-account');
+    };
+
+    useEffect(() => {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if (user) {
+            setUsername(user.username);
+        }
+    }, []);
+
     useEffect(() => {
         return () => {
             debouncedNavigate.cancel(); // Cleanup debounce on unmount
@@ -160,7 +172,7 @@ const Navbar = () => {
                             sx={{ cursor: "pointer" }}
                             onClick={handleLoginOpen}
                         >
-                            {username ? username : "Log In"}
+                            {username ? username : "log in"}
                         </Typography>
                     </Box>
                     <Badge
@@ -211,6 +223,11 @@ const Navbar = () => {
                             sx={{ mb: 2 }}
                         />
                         {error && <Typography color="error">{error}</Typography>}
+                        <Box mt={2}>
+                            <Typography variant="body2">
+                                Don't have an account? <Link href="#" onClick={handleCreateAccountClick}>Create one</Link>
+                            </Typography>
+                        </Box>
                     </form>
                 </DialogContent>
                 <DialogActions>

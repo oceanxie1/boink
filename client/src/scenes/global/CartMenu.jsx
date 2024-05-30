@@ -156,6 +156,7 @@ const CartMenu = () => {
                 navigate("/checkout");
                 dispatch(setIsCartOpen({}));
               }}
+              disabled={cart.length === 0}
             >
               CHECKOUT
             </Button>

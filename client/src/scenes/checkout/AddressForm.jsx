@@ -18,7 +18,7 @@ const AddressForm = ({
 
   const formattedError = (field) =>
     Boolean(
-      getIn(touched, formattedName(field)) &&
+        getIn(touched, formattedName(field)) &&
         getIn(errors, formattedName(field))
     );
 

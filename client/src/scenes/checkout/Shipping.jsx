@@ -28,19 +28,20 @@ const Shipping = ({
 
       <Box mb="20px">
         <FormControlLabel
+        label = "Same for Shipping Address"
           control={
+            // Inside the Shipping component
             <Checkbox
-              defaultChecked
-              value={values.shippingAddress.isSameAddress}
-              onChange={() =>
-                setFieldValue(
-                  "shippingAddress.isSameAddress",
-                  !values.shippingAddress.isSameAddress
-                )
-              }
+                defaultChecked
+                value={values.shippingAddress.isSameAddress}
+                onChange={() => {
+                    setFieldValue(
+                        "shippingAddress.isSameAddress",
+                        !values.shippingAddress.isSameAddress
+                    )
+                }}
             />
           }
-          label="Same for Shipping Address"
         />
       </Box>
 
